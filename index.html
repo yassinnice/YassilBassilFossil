@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YASSILBASSIL - Ultimate Streaming Platform</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#E50914',
+              purple: '#8B5CF6',
+              dark: '#0B0C10',
+              card: '#12141C',
+              hover: '#1F2430'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+
+  <!-- Custom Styles for Scrollbars and Animations -->
+  <style>
+    body {
+      background-color: #0b0c10;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .brand-font {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Hide horizontal scrollbars for clean rail UI */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Custom dark scrollbar for vertical elements */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0c10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222634;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8b5cf6;
+    }
+
+    /* Glassmorphism styles */
+    .glass-nav {
+      background: rgba(11, 12, 16, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .glass-card {
+      background: rgba(22, 26, 38, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Glowing badge animation */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.7); }
+    }
+    .glow-effect {
+      animation: pulseGlow 3s infinite;
+    }
+
+    .card-hover {
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-purple selection:text-white">
+
+  <header class="fixed top-0 left-0 right-0 z-40 glass-nav border-b border-gray-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo and Main Navigation -->
+        <div class="flex items-center space-x-6">
+          <a href="#" onclick="switchCategory('All')" class="flex items-center space-x-2 group">
+            <span class="text-2xl sm:text-3xl font-black tracking-wider brand-font bg-gradient-to-r from-red-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-200">
+              YASSILBASSIL
+            </span>
+            <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold tracking-widest bg-red-600 text-white rounded uppercase glow-effect">
+              STREAM
+            </span>
+          </a>
+
+          <!-- Quick Navigation Tabs (Desktop) -->
+          <nav class="hidden md:flex items-center space-x-1 text-sm font-medium text-gray-300">
+            <button onclick="switchCategory('All')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition active-tab" data-cat="All">Home</button>
+            <button onclick="switchCategory('Featured Movies')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition" data-cat="Featured Movies">Movies</button>
+            <button onclick="switchCategory('Malcolm in the Middle')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition" data-cat="Malcolm in the Middle">Malcolm</button>
+            <button onclick="switchCategory('The Amazing Digital Circus')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition" data-cat="The Amazing Digital Circus">TADC</button>
+            <button onclick="switchCategory('Sports & Olympics')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition" data-cat="Sports & Olympics">Sports</button>
+            <button onclick="switchCategory('Comics & Reads')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition" data-cat="Comics & Reads">Comics</button>
+            <button onclick="switchCategory('My List')" class="nav-tab px-3 py-1.5 rounded-lg hover:text-white hover:bg-white/10 transition text-red-400 flex items-center space-x-1" data-cat="My List">
+              <i class="fa-solid fa-heart text-xs"></i>
+              <span>My List</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Search, Surprise Me & Actions -->
+        <div class="flex items-center space-x-3">
+          
+          <!-- Search Bar -->
+          <div class="relative">
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Search movies, series..." 
+              oninput="handleSearch(this.value)"
+              class="w-36 sm:w-64 bg-gray-900/90 text-sm text-gray-200 placeholder-gray-400 rounded-full pl-9 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-700/60 transition-all duration-200"
+            />
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+            <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-2 text-gray-400 hover:text-white">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Surprise Me Button -->
+          <button 
+            onclick="playSurpriseMedia()" 
+            title="Randomly Pick Title" 
+            class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-md hover:shadow-purple-500/25 transition duration-200"
+          >
+            <i class="fa-solid fa-dice text-sm"></i>
+            <span>Surprise Me</span>
+          </button>
+
+          <!-- Mobile Nav Toggle -->
+          <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-white p-2">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-950 border-b border-gray-800 px-4 pt-2 pb-4 space-y-2 text-sm">
+      <button onclick="switchCategory('All'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">🏠 Home</button>
+      <button onclick="switchCategory('Featured Movies'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">🎬 Featured Movies</button>
+      <button onclick="switchCategory('Malcolm in the Middle'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">📺 Malcolm in the Middle</button>
+      <button onclick="switchCategory('The Amazing Digital Circus'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">🎪 The Amazing Digital Circus</button>
+      <button onclick="switchCategory('The Wonderfully Weird World of Gumball'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">🐱 Gumball (2025)</button>
+      <button onclick="switchCategory('Web & Animation Specials'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">⚡ Web & Animation Specials</button>
+      <button onclick="switchCategory('Sports & Olympics'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">⚽ Sports & Olympics</button>
+      <button onclick="switchCategory('Classic Movies'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">📽️ Classic Movies</button>
+      <button onclick="switchCategory('Adventures of Smiling Jack'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">🛩️ Smiling Jack Serial</button>
+      <button onclick="switchCategory('Comics & Reads'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md hover:bg-gray-800">📖 Comics Reader</button>
+      <button onclick="switchCategory('My List'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-red-400 hover:bg-gray-800">❤️ Saved Watchlist</button>
+      <button onclick="playSurpriseMedia(); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md bg-purple-900/40 text-purple-300 font-semibold">🎲 Surprise Me</button>
+    </div>
+  </header>
+
+  <main class="flex-grow pt-20 pb-16">
+
+    <!-- Hero Featured Banner Section -->
+    <section id="heroSection" class="relative w-full h-[65vh] min-h-[420px] max-h-[600px] mb-8 overflow-hidden bg-gray-950">
+      <!-- Backdrop Image -->
+      <div id="heroBackdrop" class="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105" style="background-image: url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=1600&q=80');">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-[#0b0c10]/70 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0b0c10] via-[#0b0c10]/80 to-transparent"></div>
+      </div>
+
+      <!-- Hero Content Overlay -->
+      <div class="relative max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-12 z-10">
+        <div class="max-w-2xl space-y-4">
+          <div class="flex items-center space-x-2">
+            <span class="px-2.5 py-0.5 text-xs font-bold bg-red-600 text-white rounded-md tracking-wider uppercase">FEATURED SPOTLIGHT</span>
+            <span id="heroRating" class="px-2 py-0.5 text-xs font-semibold bg-gray-800/80 border border-gray-700 text-gray-300 rounded">PG-13</span>
+            <span id="heroYear" class="text-xs font-medium text-gray-400">2025</span>
+          </div>
+
+          <h1 id="heroTitle" class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight drop-shadow-md">
+            A Minecraft Movie
+          </h1>
+
+          <p id="heroDescription" class="text-sm sm:text-base text-gray-300 line-clamp-3 leading-relaxed drop-shadow">
+            Four misfits find themselves struggling with ordinary problems when they are suddenly pulled through a mysterious portal into the Overworld: a bizarre, cubic wonderland that thrives on imagination.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button 
+              id="heroPlayBtn" 
+              onclick="playMediaFromHero()" 
+              class="flex items-center space-x-2 bg-white text-gray-900 font-bold px-6 py-2.5 rounded-xl hover:bg-gray-200 transition duration-200 shadow-lg hover:scale-105"
+            >
+              <i class="fa-solid fa-play text-lg"></i>
+              <span>Watch Now</span>
+            </button>
+
+            <button 
+              id="heroInfoBtn" 
+              onclick="openDetailModalFromHero()" 
+              class="flex items-center space-x-2 bg-gray-800/80 hover:bg-gray-700/90 text-white font-semibold px-5 py-2.5 rounded-xl border border-gray-700 backdrop-blur transition duration-200"
+            >
+              <i class="fa-solid fa-circle-info text-base"></i>
+              <span>More Details</span>
+            </button>
+
+            <button 
+              id="heroWatchlistBtn" 
+              onclick="toggleWatchlistFromHero()" 
+              class="p-2.5 bg-gray-800/80 hover:bg-gray-700/90 text-white rounded-xl border border-gray-700 transition"
+              title="Add to Watchlist"
+            >
+              <i class="fa-regular fa-heart text-lg" id="heroHeartIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Filter Bar (Pills) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-2">
+        <span class="text-xs uppercase font-bold text-gray-400 mr-2 flex-shrink-0">
+          <i class="fa-solid fa-filter text-purple-400 mr-1"></i> Filter:
+        </span>
+        <button onclick="switchCategory('All')" class="cat-pill active-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-purple-600 text-white transition">All Catalog</button>
+        <button onclick="switchCategory('Featured Movies')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Featured Movies</button>
+        <button onclick="switchCategory('Malcolm in the Middle')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Malcolm Series</button>
+        <button onclick="switchCategory('The Amazing Digital Circus')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Digital Circus</button>
+        <button onclick="switchCategory('The Wonderfully Weird World of Gumball')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Gumball (2025)</button>
+        <button onclick="switchCategory('Web & Animation Specials')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Animation Specials</button>
+        <button onclick="switchCategory('Sports & Olympics')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Sports & Football</button>
+        <button onclick="switchCategory('Classic Movies')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Classic Cinema</button>
+        <button onclick="switchCategory('Adventures of Smiling Jack')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Smiling Jack</button>
+        <button onclick="switchCategory('Comics & Reads')" class="cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition">Comics PDF</button>
+      </div>
+    </section>
+
+    <div id="contentContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+      <!-- Continue Watching Rail (Dynamic) -->
+      <section id="continueWatchingSection" class="hidden space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-clock-rotate-left text-purple-400"></i>
+            <span>Continue Watching</span>
+          </h2>
+          <button onclick="clearAllProgress()" class="text-xs text-gray-400 hover:text-red-400 transition">Clear History</button>
+        </div>
+        <div id="continueWatchingRail" class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Search Results Grid (Hidden by default) -->
+      <section id="searchResultsSection" class="hidden space-y-4">
+        <h2 id="searchHeading" class="text-xl font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-magnifying-glass text-purple-400"></i>
+          <span>Search Results</span>
+        </h2>
+        <div id="searchResultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <!-- Search results inserted here -->
+        </div>
+      </section>
+
+      <!-- Category Content Rows -->
+      <div id="categoryRows" class="space-y-10">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- Fullscreen Video Player Modal -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black flex flex-col justify-between transition-opacity duration-300">
+    
+    <!-- Player Top Header Control Bar -->
+    <div class="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-b from-black/90 via-black/40 to-transparent flex items-center justify-between pointer-events-auto">
+      <div class="flex items-center space-x-3">
+        <button onclick="closeVideoModal()" class="text-gray-300 hover:text-white p-2 rounded-full hover:bg-white/10 transition">
+          <i class="fa-solid fa-arrow-left text-xl"></i>
+        </button>
+        <div>
+          <h3 id="playerTitle" class="text-base sm:text-lg font-bold text-white truncate max-w-xs sm:max-w-md">Title</h3>
+          <p id="playerSubtitle" class="text-xs text-purple-400">Category</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button onclick="toggleAutoplayNext()" id="autoplayBtn" title="Toggle Autoplay Next Episode" class="px-3 py-1 rounded-full border border-gray-700 bg-gray-900/80 text-xs text-gray-300 hover:border-purple-500 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-bolt text-yellow-400"></i>
+          <span>Autoplay Next: <strong id="autoplayStatus">ON</strong></span>
+        </button>
+        
+        <button onclick="closeVideoModal()" class="text-gray-400 hover:text-white p-2">
+          <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Element Container -->
+    <div class="relative flex-grow flex items-center justify-center bg-black overflow-hidden">
+      <video 
+        id="mainVideoPlayer" 
+        class="w-full h-full max-h-screen object-contain"
+        preload="metadata"
+        playsinline
+      ></video>
+
+      <!-- Next Episode Countdown Overlay (When video ends) -->
+      <div id="nextEpisodeCountdown" class="hidden absolute inset-0 bg-black/80 backdrop-blur flex flex-col items-center justify-center z-30 text-center p-6 space-y-4">
+        <span class="text-xs uppercase font-bold text-purple-400 tracking-wider">Up Next</span>
+        <h3 id="nextEpTitle" class="text-xl sm:text-2xl font-bold text-white">Next Episode Name</h3>
+        <div id="countdownCircle" class="w-16 h-16 rounded-full border-4 border-purple-500 border-t-transparent animate-spin flex items-center justify-center">
+          <span id="countdownSecs" class="text-xl font-bold text-white">3</span>
+        </div>
+        <div class="flex items-center space-x-4 pt-2">
+          <button onclick="playNextEpisodeImmediately()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2 rounded-lg text-sm">Play Now</button>
+          <button onclick="cancelNextAutoplay()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-lg text-sm">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Video Playback Error Toast -->
+      <div id="videoErrorOverlay" class="hidden absolute inset-0 bg-gray-950 flex flex-col items-center justify-center p-6 text-center z-30 space-y-4">
+        <i class="fa-solid fa-circle-exclamation text-4xl text-red-500"></i>
+        <h3 class="text-lg font-bold text-white">Playback Interrupted</h3>
+        <p class="text-xs text-gray-400 max-w-md">The stream link could not be loaded directly by the browser media player. You can download or stream directly via the archive link.</p>
+        <a id="videoDirectDownloadLink" href="#" target="_blank" class="bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+          <i class="fa-solid fa-external-link mr-1"></i> Open Direct Video Stream
+        </a>
+      </div>
+    </div>
+
+    <!-- Custom Player Bottom Control Controls Overlay -->
+    <div class="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent space-y-2 pointer-events-auto">
+      
+      <!-- Seekbar Progress Slider -->
+      <div class="relative flex items-center group">
+        <input 
+          type="range" 
+          id="playerSeekbar" 
+          min="0" 
+          max="100" 
+          value="0" 
+          step="0.1" 
+          oninput="onSeekInput(this.value)"
+          class="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500 group-hover:h-2.5 transition-all"
+        />
+      </div>
+
+      <!-- Control Buttons Row -->
+      <div class="flex items-center justify-between text-white text-sm">
+        
+        <!-- Left: Play/Pause, Rewind, FastForward, Next/Prev, Time -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <button onclick="toggleVideoPlay()" id="playPauseBtn" class="hover:text-purple-400 transition p-1">
+            <i class="fa-solid fa-play text-xl" id="playIcon"></i>
+          </button>
+
+          <button onclick="skipVideoTime(-10)" title="Rewind 10s" class="hover:text-purple-400 transition p-1 text-gray-300">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+
+          <button onclick="skipVideoTime(10)" title="Forward 10s" class="hover:text-purple-400 transition p-1 text-gray-300">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+
+          <!-- Prev/Next Series Episode Controls -->
+          <button id="prevEpBtn" onclick="playPreviousEpisode()" title="Previous Episode" class="hover:text-purple-400 transition p-1 text-gray-400 disabled:opacity-30 disabled:hover:text-gray-400">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+
+          <button id="nextEpBtn" onclick="playNextEpisode()" title="Next Episode" class="hover:text-purple-400 transition p-1 text-gray-400 disabled:opacity-30 disabled:hover:text-gray-400">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+
+          <!-- Time Code -->
+          <span class="text-xs text-gray-300 font-mono">
+            <span id="currentTimeDisplay">00:00</span> / <span id="durationDisplay">00:00</span>
+          </span>
+        </div>
+
+        <!-- Right: Speed, Volume, PIP, Fullscreen -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          
+          <!-- Speed selector -->
+          <select id="speedSelect" onchange="changePlaybackSpeed(this.value)" class="bg-gray-900 border border-gray-700 text-xs text-gray-300 rounded px-1.5 py-1 focus:outline-none">
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2.0x</option>
+          </select>
+
+          <!-- Mute / Volume slider -->
+          <div class="hidden sm:flex items-center space-x-1.5">
+            <button onclick="toggleVideoMute()" id="muteBtn" class="hover:text-purple-400 transition text-gray-300">
+              <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+            </button>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" class="w-16 h-1 bg-gray-700 appearance-none cursor-pointer accent-purple-500 rounded">
+          </div>
+
+          <!-- PIP -->
+          <button onclick="togglePictureInPicture()" title="Picture in Picture" class="hover:text-purple-400 transition text-gray-300 hidden sm:inline-block">
+            <i class="fa-solid fa-images"></i>
+          </button>
+
+          <!-- Fullscreen Toggle -->
+          <button onclick="toggleFullscreen()" title="Toggle Fullscreen" class="hover:text-purple-400 transition text-gray-300">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Fullscreen Comic Reader PDF Modal -->
+  <div id="pdfModal" class="fixed inset-0 z-50 hidden bg-black flex flex-col justify-between">
+    <div class="p-4 glass-nav flex items-center justify-between border-b border-gray-800">
+      <div class="flex items-center space-x-3">
+        <button onclick="closePdfModal()" class="text-gray-300 hover:text-white p-2">
+          <i class="fa-solid fa-arrow-left text-xl"></i>
+        </button>
+        <div>
+          <h3 id="pdfTitle" class="text-base font-bold text-white">Avengers Comic Digital Preview</h3>
+          <p class="text-xs text-purple-400">PDF Reader View</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a id="pdfDownloadBtn" href="#" target="_blank" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded text-xs font-semibold">
+          <i class="fa-solid fa-download mr-1"></i> Open External PDF
+        </a>
+        <button onclick="closePdfModal()" class="text-gray-400 hover:text-white p-2">
+          <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+      </div>
+    </div>
+    <div class="flex-grow w-full bg-gray-950 relative">
+      <iframe id="pdfFrame" class="w-full h-full border-0" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <!-- Detailed Media Info Modal Drawer -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="relative bg-gray-900 border border-gray-800 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl">
+      <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 text-gray-400 hover:text-white bg-black/60 p-2 rounded-full backdrop-blur">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div id="detailBackdrop" class="h-56 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80');">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+        <div class="absolute bottom-4 left-6 right-6 flex items-end justify-between">
+          <div>
+            <span id="detailBadge" class="px-2 py-0.5 text-xs font-bold bg-purple-600 text-white rounded">FEATURED</span>
+            <h2 id="detailTitle" class="text-2xl font-black text-white mt-1">Ice Age 4</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div class="flex items-center space-x-3 text-xs text-gray-400">
+          <span id="detailYear" class="font-semibold text-gray-200">2012</span>
+          <span>•</span>
+          <span id="detailRating" class="border border-gray-700 px-1.5 py-0.5 rounded">PG</span>
+          <span>•</span>
+          <span id="detailDuration">1h 28m</span>
+          <span>•</span>
+          <span id="detailGenre" class="text-purple-400">Animation, Adventure</span>
+        </div>
+
+        <p id="detailDescription" class="text-sm text-gray-300 leading-relaxed">
+          Manny, Diego, and Sid embark upon another adventure after their continent is set adrift.
+        </p>
+
+        <!-- Episode Selection List if series -->
+        <div id="detailSeriesEpisodes" class="hidden space-y-2 border-t border-gray-800 pt-4">
+          <h4 class="text-xs uppercase font-bold text-purple-400">Episodes in this Series</h4>
+          <div id="episodesListGrid" class="max-h-48 overflow-y-auto space-y-1.5 pr-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-gray-800 pt-4">
+          <button id="detailPlayBtn" onclick="playFromDetailModal()" class="bg-white text-gray-900 hover:bg-gray-200 font-bold px-6 py-2 rounded-xl text-sm flex items-center space-x-2">
+            <i class="fa-solid fa-play"></i>
+            <span>Start Watching</span>
+          </button>
+          
+          <button id="detailWatchlistBtn" onclick="toggleWatchlistFromDetail()" class="text-gray-300 hover:text-white px-4 py-2 border border-gray-700 rounded-xl text-xs flex items-center space-x-1.5">
+            <i class="fa-regular fa-heart" id="detailHeartIcon"></i>
+            <span id="detailWatchlistText">Add to Watchlist</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-purple-900/90 text-white text-xs font-semibold px-4 py-3 rounded-xl border border-purple-500 shadow-xl flex items-center space-x-2">
+    <i class="fa-solid fa-circle-check text-purple-300 text-sm"></i>
+    <span id="toastText">Action completed successfully.</span>
+  </div>
+
+  <footer class="bg-gray-950 border-t border-gray-900 py-8 text-center text-xs text-gray-500 space-y-2">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-gray-300 tracking-wide brand-font">YASSILBASSIL</span>
+        <span>— Digital Entertainment Hub</span>
+      </div>
+      <div class="flex space-x-4">
+        <a href="#" onclick="switchCategory('All')" class="hover:text-gray-300">Catalog</a>
+        <a href="#" onclick="switchCategory('Comics & Reads')" class="hover:text-gray-300">Comic Reader</a>
+        <a href="#" onclick="switchCategory('My List')" class="hover:text-gray-300">My Watchlist</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* JavaScript Logic & Data Engine for YASSILBASSIL */
+
+    // Media Database Containing Provided Video Items & Metadata
+    const MEDIA_DATABASE = [
+      // 1. FEATURED MOVIES
+      {
+        id: "ice-age-4",
+        title: "Ice Age 4: Continental Drift",
+        category: "Featured Movies",
+        type: "movie",
+        year: "2012",
+        rating: "PG",
+        duration: "1h 28m",
+        genre: ["Animation", "Adventure", "Comedy"],
+        url: "https://archive.org/download/ice.-age.-4.-continental.-drift.-2012.-dvdrip.-xvi-d.-ac-3-3-lt-0-n/Ice.Age.4.Continental.Drift.2012.DVDRip.XviD.AC3-3LT0N.mp4",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "Manny, Diego, and Sid embark upon another adventure after their continent is set adrift. Using an iceberg as a ship, they encounter sea creatures and battle pirates."
+      },
+      {
+        id: "minecraft-movie",
+        title: "A Minecraft Movie",
+        category: "Featured Movies",
+        type: "movie",
+        year: "2025",
+        rating: "PG",
+        duration: "1h 40m",
+        genre: ["Action", "Adventure", "Fantasy"],
+        url: "https://archive.org/download/a-minecraft-movie-full-movie/a%20minecraft%20movie.webm",
+        poster: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=500&q=80",
+        description: "Four misfits find themselves struggling with ordinary problems when they are suddenly pulled through a mysterious portal into the Overworld: a bizarre, cubic wonderland."
+      },
+      {
+        id: "grinch",
+        title: "Dr. Seuss' The Grinch",
+        category: "Featured Movies",
+        type: "movie",
+        year: "2018",
+        rating: "PG",
+        duration: "1h 25m",
+        genre: ["Animation", "Family", "Holiday"],
+        url: "https://archive.org/download/dr.-seuss-the-grinch/Dr.%20Seuss%27%20The%20Grinch.mp4",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "A grumpy Whoville-hater plans to ruin Christmas for the village of Whoville, but a young girl's generous holiday spirit warms his heart."
+      },
+      {
+        id: "willy-wonka",
+        title: "Willy Wonka & the Chocolate Factory",
+        category: "Featured Movies",
+        type: "movie",
+        year: "1971",
+        rating: "G",
+        duration: "1h 40m",
+        genre: ["Classics", "Family", "Musical"],
+        url: "https://ia801702.us.archive.org/35/items/willy-wonka-the-chocolate-factory-1971-givefastlink/willy-wonka-the-chocolate-factory-1971-givefastlink.mp4",
+        poster: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?w=500&q=80",
+        description: "A poor boy seeks one of the five coveted golden tickets that will grant him a tour of the mysterious chocolate factory run by the eccentric Willy Wonka."
+      },
+      {
+        id: "pokemon-secrets",
+        title: "Pokémon The Movie: Secrets of the Jungle",
+        category: "Featured Movies",
+        type: "movie",
+        year: "2020",
+        rating: "TV-Y7",
+        duration: "1h 38m",
+        genre: ["Anime", "Action", "Adventure"],
+        url: "https://dn720305.ca.archive.org/0/items/pokemon-the-movie-secrets-of-the-jungle/playdrive_video_720p.mp4",
+        poster: "https://images.unsplash.com/photo-1613771404784-3a5686aa2be3?w=500&q=80",
+        description: "Koko grows up in the jungle with a solitary Zarude. When he meets Ash and Pikachu, he discovers the human world and a plot threatening his jungle home."
+      },
+      {
+        id: "pokemon-collection",
+        title: "Pokémon Movie Collection",
+        category: "Featured Movies",
+        type: "movie",
+        year: "1999",
+        rating: "TV-Y7",
+        duration: "1h 36m",
+        genre: ["Anime", "Adventure", "Classics"],
+        url: "https://archive.org/download/pokemon-movie-collection-pokemon-thefirstmovie-pokemon-the-movie-2000-pokemon-3-the-movie-dvd-.iso/POK%C3%89MON%20MOVIE%20COLLECTION%20%20%20%20PoK%C3%A9MoN%20%20TheFirstMovie%20%20%20%20PoK%C3%A9MoN%20%20The%20Movie%20%202000%20%20%20%20PoK%C3%A9MoN%20%203%20%20THE%20%20MOVIE%20%20%20DVD%20%20%20.mp4",
+        poster: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80",
+        description: "Classic Pokémon features including Mewtwo Strikes Back, The Power of One, and Spell of the Unown."
+      },
+
+      // 2. MALCOLM IN THE MIDDLE
+      {
+        id: "malcolm-s01e01",
+        seriesId: "malcolm",
+        title: "Malcolm S01E01 - Pilot",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 1,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E01%20-%20Pilot.mp4",
+        poster: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80",
+        description: "Malcolm is tested and placed in a class for gifted students, much to his dissatisfaction."
+      },
+      {
+        id: "malcolm-s01e02",
+        seriesId: "malcolm",
+        title: "Malcolm S01E02 - Red Dress",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 2,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E02%20-%20Red%20Dress.mp4",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "Lois' anniversary red dress is burned, leading to an interrogation of Malcolm, Reese, and Dewey."
+      },
+      {
+        id: "malcolm-s01e03",
+        seriesId: "malcolm",
+        title: "Malcolm S01E03 - Home Alone 4",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 3,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E03%20-%20Home%20Alone%204.mp4",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "When Hal and Lois leave the boys with a babysitter, chaotic circumstances leave them alone."
+      },
+      {
+        id: "malcolm-s01e04",
+        seriesId: "malcolm",
+        title: "Malcolm S01E04 - Shame",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 4,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E04%20-%20Shame.mp4",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "Malcolm gets into trouble after beating up a bully and feeling remorse."
+      },
+      {
+        id: "malcolm-s01e05",
+        seriesId: "malcolm",
+        title: "Malcolm S01E05 - Malcolm Babysits",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 5,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E05%20-%20Malcolm%20Babysits.mp4",
+        poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+        description: "Malcolm babysits for a rich family and learns about their luxurious lifestyle."
+      },
+      {
+        id: "malcolm-s01e06",
+        seriesId: "malcolm",
+        title: "Malcolm S01E06 - Sleepover",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 6,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E06%20-%20Sleepover.mp4",
+        poster: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&q=80",
+        description: "Malcolm sneaks Stevie out of his house for a night of arcade fun."
+      },
+      {
+        id: "malcolm-s01e07",
+        seriesId: "malcolm",
+        title: "Malcolm S01E07 - Francis Escapes",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 7,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E07%20-%20Francis%20Escapes.mp4",
+        poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
+        description: "Francis sneaks away from military academy to visit his girlfriend."
+      },
+      {
+        id: "malcolm-s01e08",
+        seriesId: "malcolm",
+        title: "Malcolm S01E08 - Krelboyne Picnic",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 8,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E08%20-%20Krelboyne%20Picnic.mp4",
+        poster: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80",
+        description: "The family attends the school picnic for gifted kids, leading to chaotic family antics."
+      },
+      {
+        id: "malcolm-s01e09",
+        seriesId: "malcolm",
+        title: "Malcolm S01E09 - Lois vs. Evil",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 9,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E09%20-%20Lois%20vs.%20Evil.mp4",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "Lois gets fired from Lucky Aide after Malcolm steals an item from the store."
+      },
+      {
+        id: "malcolm-s01e10",
+        seriesId: "malcolm",
+        title: "Malcolm S01E10 - Stock Car Races",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 10,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E10%20-%20Stock%20Car%20Races.mp4",
+        poster: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80",
+        description: "Hal takes the boys to stock car races behind Lois' back."
+      },
+      {
+        id: "malcolm-s01e11",
+        seriesId: "malcolm",
+        title: "Malcolm S01E11 - Funeral",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 11,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E11%20-%20Funeral.mp4",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "The boys try to avoid going to an aunt's funeral."
+      },
+      {
+        id: "malcolm-s01e15",
+        seriesId: "malcolm",
+        title: "Malcolm S01E15 - Smunday",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 15,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E15%20-%20Smunday.mp4",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "The boys trick Lois into believing it is Sunday instead of Monday."
+      },
+      {
+        id: "malcolm-s01e16",
+        seriesId: "malcolm",
+        title: "Malcolm S01E16 - Water Park",
+        category: "Malcolm in the Middle",
+        type: "series",
+        season: 1,
+        episode: 16,
+        year: "2000",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Comedy", "Sitcom"],
+        url: "https://archive.org/download/malcolm-in-the-middle-complete-series-2000-2006/Malcolm%20in%20the%20Middle%20%28The%20Complete%20Series%29%20%5B2000%20-%202006%5D/Season%201/S01E16%20-%20Water%20Park.mp4",
+        poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+        description: "The family visits a water park with hilarious consequences."
+      },
+
+      // 3. THE AMAZING DIGITAL CIRCUS
+      {
+        id: "tadc-ep1",
+        seriesId: "tadc",
+        title: "TADC Ep 1: PILOT",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 1,
+        year: "2023",
+        rating: "TV-PG",
+        duration: "25m",
+        genre: ["Indie Animation", "Dark Comedy", "Psychological"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%201%EF%BC%9A%20PILOT.mp4",
+        poster: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&q=80",
+        description: "A woman gets trapped in a virtual reality world along with five other humans, subjected to the whims of a wacky AI."
+      },
+      {
+        id: "tadc-ep2",
+        seriesId: "tadc",
+        title: "TADC Ep 2: Candy Carrier Chaos!",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 2,
+        year: "2024",
+        rating: "TV-PG",
+        duration: "24m",
+        genre: ["Indie Animation", "Comedy"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%202%EF%BC%9A%20Candy%20Carrier%20Chaos%21.mp4",
+        poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
+        description: "The crew embarks on an adventure through the Candy Canyon Kingdom."
+      },
+      {
+        id: "tadc-ep3",
+        seriesId: "tadc",
+        title: "TADC Ep 3: Mystery of Mildenhall Manor",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 3,
+        year: "2024",
+        rating: "TV-PG",
+        duration: "26m",
+        genre: ["Indie Animation", "Mystery"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%203%EF%BC%9A%20The%20Mystery%20Of%20Mildenhall%20Manor.mp4",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "Investigating spookier depths within Mildenhall Manor."
+      },
+      {
+        id: "tadc-ep4",
+        seriesId: "tadc",
+        title: "TADC Ep 4: Fast Food Masquerade",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 4,
+        year: "2025",
+        rating: "TV-PG",
+        duration: "23m",
+        genre: ["Indie Animation", "Comedy"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%204%EF%BC%9A%20Fast%20Food%20Masquerade.mp4",
+        poster: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80",
+        description: "A fast food service scenario turned completely upside down."
+      },
+      {
+        id: "tadc-ep5",
+        seriesId: "tadc",
+        title: "TADC Ep 5: Untitled",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 5,
+        year: "2025",
+        rating: "TV-PG",
+        duration: "22m",
+        genre: ["Indie Animation", "Surreal"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%205%EF%BC%9A%20Untitled.mp4",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "Surreal digital realms present unpredictable challenges."
+      },
+      {
+        id: "tadc-ep6",
+        seriesId: "tadc",
+        title: "TADC Ep 6: They All Get Guns",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 6,
+        year: "2025",
+        rating: "TV-PG",
+        duration: "25m",
+        genre: ["Indie Animation", "Action"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%206%EF%BC%9A%20They%20All%20Get%20Guns.mp4",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "Caine introduces tactical paintball gear with wild results."
+      },
+      {
+        id: "tadc-ep7",
+        seriesId: "tadc",
+        title: "TADC Ep 7: Beach Episode",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 7,
+        year: "2025",
+        rating: "TV-PG",
+        duration: "24m",
+        genre: ["Indie Animation", "Comedy"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%207%EF%BC%9A%20Beach%20Episode.mp4",
+        poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+        description: "A digital beach day that breaks reality."
+      },
+      {
+        id: "tadc-ep8",
+        seriesId: "tadc",
+        title: "TADC Ep 8: hjsakldfhl",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 8,
+        year: "2026",
+        rating: "TV-PG",
+        duration: "23m",
+        genre: ["Indie Animation"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%208%EF%BC%9A%20hjsakldfhl.mp4",
+        poster: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&q=80",
+        description: "An unhinged adventure glitching through system code."
+      },
+      {
+        id: "tadc-ep9",
+        seriesId: "tadc",
+        title: "TADC Ep 9: Remember (Last Act)",
+        category: "The Amazing Digital Circus",
+        type: "series",
+        season: 1,
+        episode: 9,
+        year: "2026",
+        rating: "TV-PG",
+        duration: "28m",
+        genre: ["Indie Animation", "Finale"],
+        url: "https://archive.org/download/the-amazing-digital-circus-all-episodes_202606/THE%20AMAZING%20DIGITAL%20CIRCUS%20-%20Ep%209%EF%BC%9A%20Remember.mp4",
+        poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
+        description: "The grand season conclusion of the Digital Circus saga."
+      },
+
+      // 4. GUMBALL (2025)
+      {
+        id: "gumball-ep1",
+        seriesId: "gumball",
+        title: "Gumball Ep 1 - The Burger",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 1,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E01%20-%20The%20Burger.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+        description: "Gumball and Darwin go to extremes for the ultimate burger."
+      },
+      {
+        id: "gumball-ep2",
+        seriesId: "gumball",
+        title: "Gumball Ep 2 - The Assistant",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 2,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E02%20-%20The%20Assistant.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "An assistant helper turns Elmore upside down."
+      },
+      {
+        id: "gumball-ep3",
+        seriesId: "gumball",
+        title: "Gumball Ep 3 - The Distance",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 3,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E03%20-%20The%20Distance.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "Distance tests the bounds of friendship in chaotic fashion."
+      },
+      {
+        id: "gumball-ep4",
+        seriesId: "gumball",
+        title: "Gumball Ep 4 - The Thing",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 4,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E04%20-%20The%20Thing.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&q=80",
+        description: "A strange object in the attic brings weird encounters."
+      },
+      {
+        id: "gumball-ep5",
+        seriesId: "gumball",
+        title: "Gumball Ep 5 - The Butts",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 5,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E05%20-%20The%20Butts.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
+        description: "Gumball and Darwin face bizarre rivalries at school."
+      },
+      {
+        id: "gumball-ep6",
+        seriesId: "gumball",
+        title: "Gumball Ep 6 - The Traffic",
+        category: "The Wonderfully Weird World of Gumball",
+        type: "series",
+        season: 1,
+        episode: 6,
+        year: "2025",
+        rating: "TV-Y7",
+        duration: "11m",
+        genre: ["Animation", "Comedy"],
+        url: "https://archive.org/download/the-wonderfully-weird-world-of-gumball_202601/The%20Wonderfully%20Weird%20World%20of%20Gumball%20%282025%29%20S01E06%20-%20The%20Traffic.1080p.H265.EAC3.6CH-MNKYDDL.mp4",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "Trapped in an infinite Elmore gridlock traffic jam."
+      },
+
+      // 5. WEB & ANIMATION SPECIALS
+      {
+        id: "backrooms",
+        title: "Backrooms",
+        category: "Web & Animation Specials",
+        type: "short",
+        year: "2022",
+        rating: "PG-13",
+        duration: "10m",
+        genre: ["Horror", "Mystery", "Sci-Fi"],
+        url: "https://archive.org/download/twitter-2074741309907010030/2074737985644310528.mp4",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "A camera operator clips into an endless maze of empty yellow rooms with fluorescent lights."
+      },
+      {
+        id: "gameoverse",
+        title: "Gameoverse Pilot",
+        category: "Web & Animation Specials",
+        type: "short",
+        year: "2023",
+        rating: "TV-14",
+        duration: "15m",
+        genre: ["Animation", "Action", "Gaming"],
+        url: "https://archive.org/download/gameoverse-pilot-get.gt/GAMEOVERSE%20PILOT%20%5Bget.gt%5D.mp4",
+        poster: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80",
+        description: "The action-packed pilot episode of Gameoverse following video game heroes across universes."
+      },
+      {
+        id: "toon-disney-xd",
+        title: "Toon Disney XD Special",
+        category: "Web & Animation Specials",
+        type: "short",
+        year: "2008",
+        rating: "TV-G",
+        duration: "30m",
+        genre: ["Nostalgia", "Animation"],
+        url: "https://ia600401.us.archive.org/11/items/video-output-17045188-7DBF-47F6-8D93-D2D7C6D7E90B-1/video-output-17045188-7DBF-47F6-8D93-D2D7C6D7E90B-1.mp4",
+        poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80",
+        description: "Classic broadcast recordings, bumps, and retro promos from Toon Disney and Disney XD."
+      },
+
+      // 6. SPORTS & OLYMPICS
+      {
+        id: "football-1",
+        title: "Football Match 1",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 45m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260611123122-merged-2/CARACOL_TV_HD-20260611123122-__Merged%20%282%29.mp4",
+        poster: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80",
+        description: "High stakes international football broadcast."
+      },
+      {
+        id: "football-2",
+        title: "Football Match 2",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 50m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260615102549-merged/CARACOL_TV_HD-20260615102549-__Merged.mp4",
+        poster: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=500&q=80",
+        description: "Full football match coverage with expert commentary."
+      },
+      {
+        id: "football-3",
+        title: "Football Match 3",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 40m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260613164817-merged/CARACOL_TV_HD-20260613164817-__Merged.mp4",
+        poster: "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=500&q=80",
+        description: "Electrifying match action live on field."
+      },
+      {
+        id: "football-4",
+        title: "Football Match 4",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 48m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260614140324-merged-2/CARACOL_TV_HD-20260614140324-__Merged%20%282%29.mp4",
+        poster: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80",
+        description: "Tournament football showdown match."
+      },
+      {
+        id: "football-5",
+        title: "Football Match 5",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 52m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260612175921-merged/CARACOL_TV_HD-20260612175921-__Merged.mp4",
+        poster: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=500&q=80",
+        description: "Key tournament broadcast action."
+      },
+      {
+        id: "football-6",
+        title: "Football Match 6",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 45m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260617195837-merged/CARACOL_TV_HD-20260617195837-__Merged.mp4",
+        poster: "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=500&q=80",
+        description: "High tension match action."
+      },
+      {
+        id: "football-7",
+        title: "Football Match 7",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "2026",
+        rating: "G",
+        duration: "1h 49m",
+        genre: ["Sports", "Football"],
+        url: "https://archive.org/download/caracol-tv-hd-20260616185825-merged/CARACOL_TV_HD-20260616185825-__Merged.mp4",
+        poster: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80",
+        description: "Championship group stage fixture."
+      },
+      {
+        id: "olympics-1984",
+        title: "1984 Los Angeles Olympics - Synchronized Swimming",
+        category: "Sports & Olympics",
+        type: "sports",
+        year: "1984",
+        rating: "G",
+        duration: "45m",
+        genre: ["Olympics", "Classics"],
+        url: "https://archive.org/download/1984losangelesolympicssolosynchornizedswimmingfootageconvertvideoonline.com/1984%20Los%20Angeles%20Olympics-%20Solo%20Synchornized%20Swimming%20footage%20%28convert-video-online.com%29.mp4",
+        poster: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=500&q=80",
+        description: "Historical footage from the 1984 Los Angeles Summer Olympics solo synchronized swimming routines."
+      },
+
+      // 7. CLASSIC MOVIES
+      {
+        id: "code-name-zebra",
+        title: "Code Name Zebra",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1977",
+        rating: "PG",
+        duration: "1h 34m",
+        genre: ["Action", "Classics"],
+        url: "https://archive.org/download/publicmovies212/Code_Name_Zebra.ogv",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&q=80",
+        description: "A group of former soldiers join forces to dismantle a major narcotics ring."
+      },
+      {
+        id: "a-boy-and-his-dog",
+        title: "A Boy and His Dog",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1975",
+        rating: "R",
+        duration: "1h 31m",
+        genre: ["Sci-Fi", "Post-Apocalyptic"],
+        url: "https://archive.org/download/publicmovies212/A_Boy_and_His_Dog.ogv",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "A young man and his telepathic dog wander the wasteland of post-apocalyptic 2024 America."
+      },
+      {
+        id: "a-bucket-of-blood",
+        title: "A Bucket of Blood",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1959",
+        rating: "NR",
+        duration: "1h 06m",
+        genre: ["Horror", "Comedy"],
+        url: "https://archive.org/download/publicmovies212/A_Bucket_of_Blood.ogv",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "An awkward busboy at a beatnik cafe gains fame after accidentally killing a cat and covering it in clay."
+      },
+      {
+        id: "christmas-without-snow",
+        title: "A Christmas Without Snow",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1980",
+        rating: "G",
+        duration: "1h 36m",
+        genre: ["Drama", "Holiday"],
+        url: "https://archive.org/download/publicmovies212/A_Christmas_Without_Snow.ogv",
+        poster: "https://images.unsplash.com/photo-1543589077-47d5199647ce?w=500&q=80",
+        description: "A divorced woman moves to San Francisco and tries to rebuild her life by joining a choir."
+      },
+      {
+        id: "farewell-to-arms",
+        title: "A Farewell to Arms",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1932",
+        rating: "Passed",
+        duration: "1h 29m",
+        genre: ["Romance", "War", "Classics"],
+        url: "https://archive.org/download/publicmovies212/A_Farewell_to_Arms.ogv",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&q=80",
+        description: "A romance develops between an American ambulance driver and an English nurse during WWI."
+      },
+      {
+        id: "shriek-in-the-night",
+        title: "A Shriek in the Night",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1933",
+        rating: "Passed",
+        duration: "1h 06m",
+        genre: ["Mystery", "Crime"],
+        url: "https://archive.org/download/publicmovies212/A_Shriek_in_the_Night.ogv",
+        poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+        description: "Rival newspaper reporters investigate a series of penthouse apartment murders."
+      },
+      {
+        id: "star-is-born",
+        title: "A Star is Born",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1937",
+        rating: "Passed",
+        duration: "1h 51m",
+        genre: ["Drama", "Classics"],
+        url: "https://archive.org/download/publicmovies212/A_Star_is_Born.ogv",
+        poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80",
+        description: "A young woman comes to Hollywood with dreams of stardom and achieves her goals."
+      },
+      {
+        id: "tattered-web",
+        title: "A Tattered Web",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1971",
+        rating: "TV-14",
+        duration: "1h 14m",
+        genre: ["Crime", "Drama"],
+        url: "https://archive.org/download/publicmovies212/A_Tattered_Web.ogv",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&q=80",
+        description: "A police detective conceals evidence to protect his family."
+      },
+      {
+        id: "yank-in-libya",
+        title: "A Yank in Libya",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1942",
+        rating: "Passed",
+        duration: "1h 07m",
+        genre: ["Action", "War"],
+        url: "https://archive.org/download/publicmovies212/A_Yank_in_Libya.ogv",
+        poster: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80",
+        description: "An American correspondent uncovers a Nazi plot in North Africa."
+      },
+      {
+        id: "airborne",
+        title: "Airborne",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1962",
+        rating: "Passed",
+        duration: "1h 18m",
+        genre: ["Action", "Drama"],
+        url: "https://archive.org/download/publicmovies212/Airborne.ogv",
+        poster: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=500&q=80",
+        description: "Military recruits train to become elite airborne troopers."
+      },
+      {
+        id: "appointment-in-tokyo",
+        title: "Appointment in Tokyo",
+        category: "Classic Movies",
+        type: "movie",
+        year: "1945",
+        rating: "Passed",
+        duration: "55m",
+        genre: ["Documentary", "War"],
+        url: "https://archive.org/download/publicmovies212/Appointment_in_Tokyo.ogv",
+        poster: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&q=80",
+        description: "Historic WWII documentary tracking the Pacific theatre campaign."
+      },
+
+      // 8. ADVENTURES OF SMILING JACK (SERIAL)
+      ...Array.from({ length: 12 }, (_, i) => ({
+        id: `smiling-jack-ep${i + 1}`,
+        seriesId: "smiling-jack",
+        title: `Smiling Jack EP${i + 1}`,
+        category: "Adventures of Smiling Jack",
+        type: "series",
+        season: 1,
+        episode: i + 1,
+        year: "1943",
+        rating: "Passed",
+        duration: "18m",
+        genre: ["Serial", "Action", "Aviation"],
+        url: `https://archive.org/download/publicmovies212/Adventures_of_Smiling_Jack_Ep${i + 1}.ogv`,
+        poster: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=500&q=80",
+        description: `Chapter ${i + 1} of the classic aviator hero serial fighting enemy agents during WWII.`
+      })),
+
+      // 9. COMICS
+      {
+        id: "avengers-comic",
+        title: "Avengers Comic Special Edition",
+        category: "Comics & Reads",
+        type: "pdf",
+        year: "2025",
+        rating: "All Ages",
+        duration: "48 Pages",
+        genre: ["Comic", "Superhero"],
+        url: "https://prhcomics.com/wp-content/uploads/2024/12/PREVIEWS2021040_March_2025_FINAL.pdf",
+        poster: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=500&q=80",
+        description: "Official March 2025 Avengers Comic previews release. Includes full artwork, storylines, and variant covers."
+      }
+    ];
+
+    let currentCategory = "All";
+    let activeMedia = null;
+    let watchlist = JSON.parse(localStorage.getItem("yassil_watchlist") || "[]");
+    let currentPlaylist = [];
+    let currentPlaylistIndex = -1;
+    let isAutoplayNextEnabled = true;
+    let nextAutoplayTimer = null;
+
+    // DOM Elements
+    const videoModal = document.getElementById("videoModal");
+    const mainVideoPlayer = document.getElementById("mainVideoPlayer");
+    const pdfModal = document.getElementById("pdfModal");
+    const detailModal = document.getElementById("detailModal");
+
+    // Launch Application on Load
+    window.onload = function() {
+      renderCatalog();
+      updateContinueWatchingRail();
+      setupHeroBanner();
+    };
+
+    function renderCatalog() {
+      const categoryRows = document.getElementById("categoryRows");
+      categoryRows.innerHTML = "";
+
+      let categoriesToDisplay = [];
+      
+      if (currentCategory === "All") {
+        categoriesToDisplay = [
+          "Featured Movies",
+          "Malcolm in the Middle",
+          "The Amazing Digital Circus",
+          "The Wonderfully Weird World of Gumball",
+          "Web & Animation Specials",
+          "Sports & Olympics",
+          "Classic Movies",
+          "Adventures of Smiling Jack",
+          "Comics & Reads"
+        ];
+      } else if (currentCategory === "My List") {
+        renderWatchlistGrid();
+        return;
+      } else {
+        categoriesToDisplay = [currentCategory];
+      }
+
+      categoriesToDisplay.forEach(cat => {
+        const items = MEDIA_DATABASE.filter(m => m.category === cat);
+        if (items.length === 0) return;
+
+        const row = document.createElement("section");
+        row.className = "space-y-3";
+
+        const header = document.createElement("div");
+        header.className = "flex items-center justify-between";
+        header.innerHTML = `
+          <h2 class="text-lg sm:text-xl font-bold text-white flex items-center space-x-2">
+            <span class="w-2 h-5 bg-gradient-to-b from-purple-500 to-indigo-600 rounded-full inline-block"></span>
+            <span>${cat}</span>
+          </h2>
+          <span class="text-xs text-gray-500 font-medium">${items.length} ${items.length === 1 ? 'Title' : 'Titles'}</span>
+        `;
+
+        const rail = document.createElement("div");
+        rail.className = "flex space-x-4 overflow-x-auto no-scrollbar py-2";
+
+        items.forEach(item => {
+          rail.appendChild(createMediaCard(item));
+        });
+
+        row.appendChild(header);
+        row.appendChild(rail);
+        categoryRows.appendChild(row);
+      });
+    }
+
+    function createMediaCard(item) {
+      const card = document.createElement("div");
+      card.className = "flex-none w-40 sm:w-48 glass-card rounded-xl overflow-hidden cursor-pointer card-hover group relative";
+
+      const isSaved = watchlist.includes(item.id);
+      const isPdf = item.type === "pdf";
+
+      card.innerHTML = `
+        <div class="relative aspect-[2/3] w-full overflow-hidden bg-gray-950" onclick="handleCardClick('${item.id}')">
+          <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-purple-600 text-white">${item.rating}</span>
+              <button onclick="event.stopPropagation(); toggleWatchlist('${item.id}')" class="p-1.5 rounded-full bg-black/60 hover:bg-red-600 text-white transition">
+                <i class="${isSaved ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart text-xs"></i>
+              </button>
+            </div>
+            <div class="text-center">
+              <div class="w-10 h-10 rounded-full bg-purple-600/90 text-white flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition">
+                <i class="fa-solid ${isPdf ? 'fa-book-open' : 'fa-play'} text-sm ${isPdf ? '' : 'ml-0.5'}"></i>
+              </div>
+            </div>
+          </div>
+          <span class="absolute bottom-2 right-2 text-[10px] bg-black/80 text-gray-300 px-1.5 py-0.5 rounded backdrop-blur">
+            ${item.duration}
+          </span>
+        </div>
+
+        <div class="p-3 space-y-1">
+          <h3 class="text-xs sm:text-sm font-bold text-gray-100 truncate group-hover:text-purple-400 transition" title="${item.title}">${item.title}</h3>
+          <p class="text-[11px] text-gray-400 truncate">${item.genre ? item.genre.join(', ') : item.category}</p>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function renderWatchlistGrid() {
+      const categoryRows = document.getElementById("categoryRows");
+      categoryRows.innerHTML = "";
+
+      const savedItems = MEDIA_DATABASE.filter(m => watchlist.includes(m.id));
+
+      const section = document.createElement("section");
+      section.className = "space-y-4";
+      section.innerHTML = `
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-heart text-red-500"></i>
+            <span>My Watchlist (${savedItems.length})</span>
+          </h2>
+          ${savedItems.length > 0 ? `<button onclick="clearWatchlist()" class="text-xs text-red-400 hover:underline">Clear Watchlist</button>` : ''}
+        </div>
+      `;
+
+      if (savedItems.length === 0) {
+        section.innerHTML += `
+          <div class="text-center py-16 space-y-3">
+            <i class="fa-regular fa-heart text-4xl text-gray-600"></i>
+            <p class="text-gray-400 text-sm">Your watchlist is currently empty.</p>
+            <button onclick="switchCategory('All')" class="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg font-semibold">Browse Titles</button>
+          </div>
+        `;
+      } else {
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4";
+        savedItems.forEach(item => grid.appendChild(createMediaCard(item)));
+        section.appendChild(grid);
+      }
+
+      categoryRows.appendChild(section);
+    }
+
+    function handleCardClick(mediaId) {
+      const item = MEDIA_DATABASE.find(m => m.id === mediaId);
+      if (!item) return;
+
+      if (item.type === "pdf") {
+        openPdfModal(item);
+      } else {
+        openVideoModal(item);
+      }
+    }
+
+    function openVideoModal(item) {
+      activeMedia = item;
+      
+      // Calculate sequence playlist for previous/next episode navigation
+      if (item.seriesId) {
+        currentPlaylist = MEDIA_DATABASE.filter(m => m.seriesId === item.seriesId);
+      } else {
+        currentPlaylist = MEDIA_DATABASE.filter(m => m.category === item.category);
+      }
+      currentPlaylistIndex = currentPlaylist.findIndex(m => m.id === item.id);
+
+      // Populate Header
+      document.getElementById("playerTitle").innerText = item.title;
+      document.getElementById("playerSubtitle").innerText = `${item.category} • ${item.duration}`;
+
+      // Reset error view
+      document.getElementById("videoErrorOverlay").classList.add("hidden");
+      document.getElementById("nextEpisodeCountdown").classList.add("hidden");
+
+      // Set video source
+      mainVideoPlayer.src = item.url;
+      videoModal.classList.remove("hidden");
+
+      // Check for saved progress
+      const savedTime = localStorage.getItem("yassil_progress_" + item.id);
+      if (savedTime && parseFloat(savedTime) > 5) {
+        mainVideoPlayer.currentTime = parseFloat(savedTime);
+        showToast(`Resumed from ${formatTime(parseFloat(savedTime))}`);
+      }
+
+      mainVideoPlayer.play().then(() => {
+        updatePlayPauseUI(true);
+      }).catch(err => {
+        console.warn("Autoplay restriction or video error:", err);
+        updatePlayPauseUI(false);
+      });
+
+      updatePlaylistNavButtons();
+    }
+
+    function closeVideoModal() {
+      if (mainVideoPlayer) {
+        // Save current progress before closing
+        if (activeMedia && mainVideoPlayer.currentTime > 5) {
+          saveProgress(activeMedia.id, mainVideoPlayer.currentTime, mainVideoPlayer.duration);
+        }
+        mainVideoPlayer.pause();
+        mainVideoPlayer.src = "";
+      }
+      videoModal.classList.add("hidden");
+      cancelNextAutoplay();
+      updateContinueWatchingRail();
+    }
+
+    mainVideoPlayer.ontimeupdate = function() {
+      const curr = mainVideoPlayer.currentTime;
+      const dur = mainVideoPlayer.duration || 1;
+      
+      const percent = (curr / dur) * 100;
+      document.getElementById("playerSeekbar").value = percent;
+      document.getElementById("currentTimeDisplay").innerText = formatTime(curr);
+      document.getElementById("durationDisplay").innerText = formatTime(dur);
+
+      if (activeMedia && curr > 3) {
+        saveProgress(activeMedia.id, curr, dur);
+      }
+    };
+
+    mainVideoPlayer.onerror = function() {
+      document.getElementById("videoErrorOverlay").classList.remove("hidden");
+      document.getElementById("videoDirectDownloadLink").href = activeMedia ? activeMedia.url : "#";
+    };
+
+    mainVideoPlayer.onended = function() {
+      if (isAutoplayNextEnabled && hasNextEpisode()) {
+        triggerAutoplayCountdown();
+      }
+    };
+
+    function toggleVideoPlay() {
+      if (mainVideoPlayer.paused) {
+        mainVideoPlayer.play();
+        updatePlayPauseUI(true);
+      } else {
+        mainVideoPlayer.pause();
+        updatePlayPauseUI(false);
+      }
+    }
+
+    function updatePlayPauseUI(isPlaying) {
+      const icon = document.getElementById("playIcon");
+      if (isPlaying) {
+        icon.className = "fa-solid fa-pause text-xl";
+      } else {
+        icon.className = "fa-solid fa-play text-xl";
+      }
+    }
+
+    function onSeekInput(percent) {
+      if (mainVideoPlayer.duration) {
+        mainVideoPlayer.currentTime = (percent / 100) * mainVideoPlayer.duration;
+      }
+    }
+
+    function skipVideoTime(seconds) {
+      mainVideoPlayer.currentTime = Math.max(0, Math.min(mainVideoPlayer.duration || 0, mainVideoPlayer.currentTime + seconds));
+    }
+
+    function changePlaybackSpeed(speed) {
+      mainVideoPlayer.playbackRate = parseFloat(speed);
+    }
+
+    function changeVolume(val) {
+      mainVideoPlayer.volume = parseFloat(val);
+      const icon = document.getElementById("volumeIcon");
+      if (val == 0) icon.className = "fa-solid fa-volume-xmark";
+      else icon.className = "fa-solid fa-volume-high";
+    }
+
+    function toggleVideoMute() {
+      mainVideoPlayer.muted = !mainVideoPlayer.muted;
+      document.getElementById("volumeSlider").value = mainVideoPlayer.muted ? 0 : mainVideoPlayer.volume;
+      const icon = document.getElementById("volumeIcon");
+      icon.className = mainVideoPlayer.muted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        videoModal.requestFullscreen().catch(err => console.log(err));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function togglePictureInPicture() {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture();
+      } else if (mainVideoPlayer.requestPictureInPicture) {
+        mainVideoPlayer.requestPictureInPicture();
+      }
+    }
+
+    function hasNextEpisode() {
+      return currentPlaylistIndex >= 0 && currentPlaylistIndex < currentPlaylist.length - 1;
+    }
+
+    function hasPreviousEpisode() {
+      return currentPlaylistIndex > 0;
+    }
+
+    function updatePlaylistNavButtons() {
+      document.getElementById("prevEpBtn").disabled = !hasPreviousEpisode();
+      document.getElementById("nextEpBtn").disabled = !hasNextEpisode();
+    }
+
+    function playNextEpisode() {
+      if (hasNextEpisode()) {
+        currentPlaylistIndex++;
+        openVideoModal(currentPlaylist[currentPlaylistIndex]);
+      }
+    }
+
+    function playPreviousEpisode() {
+      if (hasPreviousEpisode()) {
+        currentPlaylistIndex--;
+        openVideoModal(currentPlaylist[currentPlaylistIndex]);
+      }
+    }
+
+    function toggleAutoplayNext() {
+      isAutoplayNextEnabled = !isAutoplayNextEnabled;
+      document.getElementById("autoplayStatus").innerText = isAutoplayNextEnabled ? "ON" : "OFF";
+      showToast(`Autoplay Next: ${isAutoplayNextEnabled ? "Enabled" : "Disabled"}`);
+    }
+
+    function triggerAutoplayCountdown() {
+      if (!hasNextEpisode()) return;
+      
+      const nextItem = currentPlaylist[currentPlaylistIndex + 1];
+      document.getElementById("nextEpTitle").innerText = nextItem.title;
+      document.getElementById("nextEpisodeCountdown").classList.remove("hidden");
+
+      let countdown = 3;
+      document.getElementById("countdownSecs").innerText = countdown;
+
+      nextAutoplayTimer = setInterval(() => {
+        countdown--;
+        document.getElementById("countdownSecs").innerText = countdown;
+        if (countdown <= 0) {
+          cancelNextAutoplay();
+          playNextEpisode();
+        }
+      }, 1000);
+    }
+
+    function cancelNextAutoplay() {
+      if (nextAutoplayTimer) {
+        clearInterval(nextAutoplayTimer);
+        nextAutoplayTimer = null;
+      }
+      document.getElementById("nextEpisodeCountdown").classList.add("hidden");
+    }
+
+    function playNextEpisodeImmediately() {
+      cancelNextAutoplay();
+      playNextEpisode();
+    }
+
+    function openPdfModal(item) {
+      activeMedia = item;
+      document.getElementById("pdfTitle").innerText = item.title;
+      document.getElementById("pdfDownloadBtn").href = item.url;
+      document.getElementById("pdfFrame").src = item.url;
+      pdfModal.classList.remove("hidden");
+    }
+
+    function closePdfModal() {
+      document.getElementById("pdfFrame").src = "about:blank";
+      pdfModal.classList.add("hidden");
+    }
+
+    function saveProgress(id, currentTime, duration) {
+      const history = JSON.parse(localStorage.getItem("yassil_history") || "{}");
+      history[id] = {
+        currentTime: currentTime,
+        duration: duration,
+        timestamp: Date.now()
+      };
+      localStorage.setItem("yassil_history", JSON.stringify(history));
+      localStorage.setItem("yassil_progress_" + id, currentTime);
+    }
+
+    function updateContinueWatchingRail() {
+      const history = JSON.parse(localStorage.getItem("yassil_history") || "{}");
+      const rail = document.getElementById("continueWatchingRail");
+      const section = document.getElementById("continueWatchingSection");
+      rail.innerHTML = "";
+
+      const historyKeys = Object.keys(history);
+      if (historyKeys.length === 0) {
+        section.classList.add("hidden");
+        return;
+      }
+
+      section.classList.remove("hidden");
+
+      historyKeys.forEach(id => {
+        const item = MEDIA_DATABASE.find(m => m.id === id);
+        if (!item) return;
+
+        const data = history[id];
+        const percent = Math.min(100, Math.round((data.currentTime / data.duration) * 100));
+
+        const card = document.createElement("div");
+        card.className = "flex-none w-48 sm:w-56 glass-card rounded-xl overflow-hidden cursor-pointer card-hover group";
+        card.onclick = () => handleCardClick(item.id);
+
+        card.innerHTML = `
+          <div class="relative aspect-video w-full bg-gray-950 overflow-hidden">
+            <img src="${item.poster}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg">
+                <i class="fa-solid fa-play ml-0.5"></i>
+              </div>
+            </div>
+            <!-- Progress Bar Overlay -->
+            <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-gray-800">
+              <div class="h-full bg-purple-500" style="width: ${percent}%"></div>
+            </div>
+          </div>
+          <div class="p-2.5">
+            <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
+            <p class="text-[10px] text-gray-400 font-mono mt-0.5">${formatTime(data.currentTime)} / ${formatTime(data.duration)} (${percent}%)</p>
+          </div>
+        `;
+
+        rail.appendChild(card);
+      });
+    }
+
+    function clearAllProgress() {
+      localStorage.removeItem("yassil_history");
+      updateContinueWatchingRail();
+      showToast("Viewing history cleared");
+    }
+
+    function toggleWatchlist(id) {
+      const idx = watchlist.indexOf(id);
+      if (idx > -1) {
+        watchlist.splice(idx, 1);
+        showToast("Removed from Watchlist");
+      } else {
+        watchlist.push(id);
+        showToast("Added to Watchlist!");
+      }
+      localStorage.setItem("yassil_watchlist", JSON.stringify(watchlist));
+      renderCatalog();
+      setupHeroBanner();
+    }
+
+    function clearWatchlist() {
+      watchlist = [];
+      localStorage.setItem("yassil_watchlist", JSON.stringify(watchlist));
+      renderCatalog();
+      showToast("Watchlist cleared");
+    }
+
+    function setupHeroBanner() {
+      const hero = MEDIA_DATABASE.find(m => m.id === "minecraft-movie") || MEDIA_DATABASE[0];
+      activeMedia = hero;
+
+      document.getElementById("heroTitle").innerText = hero.title;
+      document.getElementById("heroDescription").innerText = hero.description;
+      document.getElementById("heroYear").innerText = hero.year;
+      document.getElementById("heroRating").innerText = hero.rating;
+      document.getElementById("heroBackdrop").style.backgroundImage = `url('${hero.poster}')`;
+
+      const isSaved = watchlist.includes(hero.id);
+      document.getElementById("heroHeartIcon").className = isSaved ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart";
+    }
+
+    function playMediaFromHero() {
+      if (activeMedia) {
+        handleCardClick(activeMedia.id);
+      }
+    }
+
+    function openDetailModalFromHero() {
+      if (activeMedia) {
+        openDetailModal(activeMedia);
+      }
+    }
+
+    function toggleWatchlistFromHero() {
+      if (activeMedia) {
+        toggleWatchlist(activeMedia.id);
+      }
+    }
+
+    function playSurpriseMedia() {
+      const randomIndex = Math.floor(Math.random() * MEDIA_DATABASE.length);
+      const randomItem = MEDIA_DATABASE[randomIndex];
+      showToast(`🎲 Surprise Pick: ${randomItem.title}`);
+      handleCardClick(randomItem.id);
+    }
+
+    function openDetailModal(item) {
+      activeMedia = item;
+      document.getElementById("detailTitle").innerText = item.title;
+      document.getElementById("detailDescription").innerText = item.description;
+      document.getElementById("detailYear").innerText = item.year;
+      document.getElementById("detailRating").innerText = item.rating;
+      document.getElementById("detailDuration").innerText = item.duration;
+      document.getElementById("detailGenre").innerText = item.genre ? item.genre.join(", ") : item.category;
+      document.getElementById("detailBackdrop").style.backgroundImage = `url('${item.poster}')`;
+
+      const isSaved = watchlist.includes(item.id);
+      document.getElementById("detailHeartIcon").className = isSaved ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart";
+
+      // Render episodes list if series
+      const seriesContainer = document.getElementById("detailSeriesEpisodes");
+      const epGrid = document.getElementById("episodesListGrid");
+      epGrid.innerHTML = "";
+
+      if (item.seriesId) {
+        seriesContainer.classList.remove("hidden");
+        const seriesEpisodes = MEDIA_DATABASE.filter(m => m.seriesId === item.seriesId);
+        seriesEpisodes.forEach(ep => {
+          const epRow = document.createElement("div");
+          epRow.className = "flex items-center justify-between p-2 rounded bg-gray-800/60 hover:bg-purple-900/40 cursor-pointer text-xs transition";
+          epRow.onclick = () => { closeDetailModal(); handleCardClick(ep.id); };
+          epRow.innerHTML = `
+            <span class="font-semibold text-gray-200 truncate">${ep.title}</span>
+            <span class="text-gray-400 font-mono text-[10px] ml-2">${ep.duration}</span>
+          `;
+          epGrid.appendChild(epRow);
+        });
+      } else {
+        seriesContainer.classList.add("hidden");
+      }
+
+      detailModal.classList.remove("hidden");
+    }
+
+    function closeDetailModal() {
+      detailModal.classList.add("hidden");
+    }
+
+    function playFromDetailModal() {
+      closeDetailModal();
+      if (activeMedia) {
+        handleCardClick(activeMedia.id);
+      }
+    }
+
+    function toggleWatchlistFromDetail() {
+      if (activeMedia) {
+        toggleWatchlist(activeMedia.id);
+        const isSaved = watchlist.includes(activeMedia.id);
+        document.getElementById("detailHeartIcon").className = isSaved ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart";
+      }
+    }
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      
+      // Update Navbar active tab styles
+      document.querySelectorAll(".nav-tab").forEach(tab => {
+        if (tab.getAttribute("data-cat") === cat) {
+          tab.classList.add("bg-white/10", "text-white");
+        } else {
+          tab.classList.remove("bg-white/10", "text-white");
+        }
+      });
+
+      // Update Pill filter styles
+      document.querySelectorAll(".cat-pill").forEach(pill => {
+        if (pill.innerText.trim() === cat || (cat === "All" && pill.innerText.includes("All"))) {
+          pill.className = "cat-pill active-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-purple-600 text-white transition";
+        } else {
+          pill.className = "cat-pill whitespace-nowrap px-4 py-1.5 text-xs font-semibold rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 transition";
+        }
+      });
+
+      // Hide Search Grid
+      document.getElementById("searchResultsSection").classList.add("hidden");
+      document.getElementById("categoryRows").classList.remove("hidden");
+
+      renderCatalog();
+    }
+
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      const clearBtn = document.getElementById("clearSearchBtn");
+      const searchSection = document.getElementById("searchResultsSection");
+      const searchGrid = document.getElementById("searchResultsGrid");
+      const categoryRows = document.getElementById("categoryRows");
+
+      if (!q) {
+        clearBtn.classList.add("hidden");
+        searchSection.classList.add("hidden");
+        categoryRows.classList.remove("hidden");
+        return;
+      }
+
+      clearBtn.classList.remove("hidden");
+      categoryRows.classList.add("hidden");
+      searchSection.classList.remove("hidden");
+
+      const matches = MEDIA_DATABASE.filter(m => 
+        m.title.toLowerCase().includes(q) || 
+        m.category.toLowerCase().includes(q) || 
+        (m.genre && m.genre.some(g => g.toLowerCase().includes(q)))
+      );
+
+      document.getElementById("searchHeading").innerHTML = `
+        <i class="fa-solid fa-magnifying-glass text-purple-400"></i>
+        <span>Search Results for "${query}" (${matches.length})</span>
+      `;
+
+      searchGrid.innerHTML = "";
+      if (matches.length === 0) {
+        searchGrid.innerHTML = `<p class="col-span-full text-gray-400 text-xs py-8 text-center">No matching titles found.</p>`;
+      } else {
+        matches.forEach(item => searchGrid.appendChild(createMediaCard(item)));
+      }
+    }
+
+    function clearSearch() {
+      const input = document.getElementById("searchInput");
+      input.value = "";
+      handleSearch("");
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("hidden");
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastNotification");
+      document.getElementById("toastText").innerText = message;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2500);
+    }
+
+    // Keyboard Shortcuts for Video Player
+    document.addEventListener("keydown", (e) => {
+      if (!videoModal.classList.contains("hidden")) {
+        if (e.key === " " || e.key === "k") {
+          e.preventDefault();
+          toggleVideoPlay();
+        } else if (e.key === "ArrowRight") {
+          skipVideoTime(10);
+        } else if (e.key === "ArrowLeft") {
+          skipVideoTime(-10);
+        } else if (e.key === "f") {
+          toggleFullscreen();
+        } else if (e.key === "m") {
+          toggleVideoMute();
+        } else if (e.key === "Escape") {
+          closeVideoModal();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
